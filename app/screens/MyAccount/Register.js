@@ -1,11 +1,74 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Button, Text } from 'react-native-elements';
 
+import t from 'tcomb-form-native';
+const Form = t.form.Form;
+
+// Forms 
+import { RegisterStruct , RegisterOptions} from '../../forms/Register'
+ 
 class Register extends Component {
+
+  constructor(){
+    super();
+    this.state = {
+      registerStruct: RegisterStruct,
+      registerOptions: RegisterOptions,
+      formData: {
+        name:"",
+        email:"",
+        password:"",
+        passwordConfirmation:""
+      },
+      formErrorMessage:""
+    }
+  }
+
+  register = () => {
+    const { password, passwordConfirmation } =this.state.formData;
+    const validatePasswords = (password == passwordConfirmation);
+    console.log(validatePasswords)
+    if(validatePasswords){
+      const validate = this.refs.registerForm.getValue();
+      if(!validate){
+        this.setState({
+          formErrorMessage:"Formulario invalido"
+        })
+      }else{
+        console.log("VALIDADO")
+      }
+      return;
+    }
+    console.log("QUE PEDO")
+    this.setState({
+      formErrorMessage:"Las contraseñas no son iguales"
+    })
+    console.log(this.state.formData)
+  }
+
+  onChangeFormRegister = (formValue) =>{
+    this.setState({formData:formValue})
+  }
+
   render() {
+
+    const { registerStruct, registerOptions, formData, formErrorMessage } = this.state;
+
     return (
       <View style={styles.viewBody}>
-        <Text>Register Screen</Text>
+        <Form 
+          ref="registerForm" 
+          type={registerStruct} 
+          options={registerOptions} 
+          value={formData}
+          onChange={(formValue) => this.onChangeFormRegister(formValue)}
+          />
+        <Button 
+          title="Unirse" 
+          onPress={this.register} 
+          buttonStyle ={styles.buttonRegister}/>
+        <Text style={styles.formErrorMessage}>{formErrorMessage}</Text>
       </View>
     );
   }
@@ -14,9 +77,20 @@ class Register extends Component {
 const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginLeft: 40,
+    marginRight: 40
+  },
+  buttonRegister:{
+    backgroundColor: "#00a680",
+    marginTop:20,
+    marginLeft:10,
+    marginRight:10
+  },
+  formErrorMessage:{
+    color:'#f00',
+    textAlign:'center',
+    marginTop:30
   }
 });
 
