@@ -7,6 +7,9 @@ const Form = t.form.Form;
 
 // Forms 
 import { RegisterStruct , RegisterOptions} from '../../forms/Register'
+
+// Firebase
+import * as firebase from 'firebase';
  
 class Register extends Component {
 
@@ -26,25 +29,30 @@ class Register extends Component {
   }
 
   register = () => {
-    const { password, passwordConfirmation } =this.state.formData;
-    const validatePasswords = (password == passwordConfirmation);
-    console.log(validatePasswords)
-    if(validatePasswords){
+    const { password, passwordConfirmation } = this.state.formData;
+    if(password == passwordConfirmation){
       const validate = this.refs.registerForm.getValue();
-      if(!validate){
+      if(validate){
+        this.setState({formErrorMessage:""});
+        firebase
+        .auth()
+        .createUserWithEmailAndPassword(validate.email, validate.password)
+        .then(res=>{
+          console.log("VALIDADO")
+        }).catch(err=>{
+          console.log("El email ya esta en uso")
+        })
+      }else{
         this.setState({
           formErrorMessage:"Formulario invalido"
         })
-      }else{
-        console.log("VALIDADO")
+        
       }
-      return;
+    }else{
+      this.setState({
+        formErrorMessage:"Las contraseñas no son iguales"
+      })
     }
-    console.log("QUE PEDO")
-    this.setState({
-      formErrorMessage:"Las contraseñas no son iguales"
-    })
-    console.log(this.state.formData)
   }
 
   onChangeFormRegister = (formValue) =>{

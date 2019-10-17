@@ -15,7 +15,7 @@ function inputTemplate(locals){
                     size={locals.config.iconSize}
                     color={locals.config.iconColor} />}
             // Set input value from the "Form" onChange function
-            onChange={value => locals.onChange(value)}
+            onChangeText={value => locals.onChange(value)}
         ></Input>
     </View>);
 }
