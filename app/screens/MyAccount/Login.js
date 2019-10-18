@@ -16,6 +16,7 @@ const Form = t.form.Form;
 import { LoginStruct, LoginOptions } from "../../forms/Login";
 
 import * as firebase from "firebase";
+//import
 
 class Login extends Component {
   constructor() {
@@ -57,7 +58,7 @@ class Login extends Component {
   };
 
   loginFacebook = async () => {
-    const { type, token } = await Expo.Facebook.logInWhitReadPermissionsAsync()
+    const { type, token } = await Expo.Facebook.logInWhitReadPermissionsAsync();
   };
 
   onChangeFormLogin = loginData => {
