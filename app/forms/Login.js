@@ -5,27 +5,13 @@ import formValidation from "../utils/Validation";
 
 import inputTemplate from "./templates/Input";
 
-export const RegisterStruct = t.struct({
-  name: t.String,
+export const LoginStruct = t.struct({
   email: formValidation.email,
-  password: formValidation.password,
-  passwordConfirmation: formValidation.password
+  password: formValidation.password
 });
 
-export const RegisterOptions = {
+export const LoginOptions = {
   fields: {
-    name: {
-      label: "Nombre (*)",
-      error: "Nombre invalido",
-      template: inputTemplate,
-      config: {
-        placeholder: "Nombre y apellidos",
-        iconName: "account-outline",
-        iconType: "material-community",
-        iconSize: 24,
-        iconColor: "#b3b3b3"
-      }
-    },
     email: {
       label: "Email (*)",
       error: "Email Invalido",
@@ -47,20 +33,6 @@ export const RegisterOptions = {
         password: true,
         secureTextEntry: true,
         iconName: "lock-outline",
-        iconType: "material-community",
-        iconSize: 24,
-        iconColor: "#b3b3b3"
-      }
-    },
-    passwordConfirmation: {
-      label: "Repetir Contraseña (*)",
-      error: "Contraseña Invalida",
-      template: inputTemplate,
-      config: {
-        password: true,
-        secureTextEntry: true,
-        placeholder: "Repite tu contraseña",
-        iconName: "lock-reset",
         iconType: "material-community",
         iconSize: 24,
         iconColor: "#b3b3b3"
