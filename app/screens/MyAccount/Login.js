@@ -16,7 +16,9 @@ const Form = t.form.Form;
 import { LoginStruct, LoginOptions } from "../../forms/Login";
 
 import * as firebase from "firebase";
-//import
+import * as Facebook from "expo-facebook";
+
+import { FacebookAPI } from "../../utils/Social";
 
 class Login extends Component {
   constructor() {
@@ -58,7 +60,36 @@ class Login extends Component {
   };
 
   loginFacebook = async () => {
-    const { type, token } = await Expo.Facebook.logInWhitReadPermissionsAsync();
+    try {
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions
+      } = await Facebook.logInWithReadPermissionsAsync(
+        FacebookAPI.application_id,
+        { permissions: FacebookAPI.permissions }
+      );
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const credentials = firebase.auth.FacebookAuthProvider.credential(
+          token
+        );
+        firebase
+          .auth()
+          .signInWithCredential(credentials)
+          .then(() => {
+            this.refs.toastLogin.show("Login Correcto", 100, () => {
+              this.props.navigation.goBack();
+            });
+          });
+      } else {
+        this.refs.toastLogin.show("Inicio de sesión cancelado", 300);
+      }
+    } catch ({ message }) {
+      this.refs.toastLogin.show("Error desconocido, intentelo más tarde", 300);
+    }
   };
 
   onChangeFormLogin = loginData => {
