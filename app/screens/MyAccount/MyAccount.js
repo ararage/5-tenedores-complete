@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-elements";
 
+// Firebase
 import * as firebase from "firebase";
+
+// Components
+import MyAccountGuest from "../../components/MyAccount/MyAccountGuest";
+import MyAccountUser from "../../components/MyAccount/MyAccountUser"
+
 
 class MyAccount extends Component {
   constructor() {
@@ -37,29 +43,14 @@ class MyAccount extends Component {
     const { login } = this.state;
     if (login) {
       return (
-        <View style={styles.viewBody}>
-          <Text>Estas logueado correctamente</Text>
-          <Button title="Cerrar Sesion" onPress={() => this.logout()} />
-        </View>
+        <MyAccountUser />
       );
     }
     return (
-      <View style={styles.viewBody}>
-        <Text>MyAccount</Text>
-        <Button title="Registro" onPress={() => this.goToScreen("Register")} />
-        <Button title="Login" onPress={() => this.goToScreen("Login")} />
-      </View>
+      // Pass goToScreen function to MyAccountGuest component
+      <MyAccountGuest goToScreen={this.goToScreen}/>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  viewBody: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
 
 export default MyAccount;

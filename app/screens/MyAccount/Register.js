@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-elements";
+import { StyleSheet, SafeAreaView, ScrollView , ActivityIndicator } from "react-native";
+import { Button, Text, Image } from "react-native-elements";
 
-import Toast, { DURATION } from "react-native-easy-toast";
+import Toast from "react-native-easy-toast";
 
 import t from "tcomb-form-native";
 const Form = t.form.Form;
@@ -72,40 +72,56 @@ class Register extends Component {
     } = this.state;
 
     return (
-      <View style={styles.viewBody}>
-        <Form
-          ref="registerForm"
-          type={registerStruct}
-          options={registerOptions}
-          value={formData}
-          onChange={formValue => this.onChangeFormRegister(formValue)}
-        />
-        <Button
-          title="Unirse"
-          onPress={this.register}
-          buttonStyle={styles.buttonRegister}
-        />
-        <Text style={styles.formErrorMessage}>{formErrorMessage}</Text>
-        <Toast
-          ref="toast"
-          position="bottom"
-          positionValue={250}
-          fadeInDuration={1000}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: "#fff" }}
-        />
-      </View>
+      <SafeAreaView style={styles.container}>  
+        <ScrollView
+          style={styles.viewBody}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
+          <Image
+              source={require("../../../assets/img/5-tenedores-letras-icono-logo.png")}
+            containerStyle={styles.containerLogo}
+            style={styles.logo}
+            PlaceholderContent={<ActivityIndicator />}
+            resizeMode="contain"
+          />
+          <Form
+            ref="registerForm"
+            type={registerStruct}
+            options={registerOptions}
+            value={formData}
+            onChange={formValue => this.onChangeFormRegister(formValue)}
+          />
+          <Button
+            title="Unirse"
+            onPress={this.register}
+            buttonStyle={styles.buttonRegister}
+          />
+          <Text style={styles.formErrorMessage}>{formErrorMessage}</Text>
+          <Toast
+            ref="toast"
+            position="bottom"
+            positionValue={250}
+            fadeInDuration={1000}
+            fadeOutDuration={1000}
+            opacity={0.8}
+            textStyle={{ color: "#fff" }}
+          />
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   viewBody: {
     flex: 1,
-    justifyContent: "center",
     marginLeft: 40,
-    marginRight: 40
+    marginRight: 40,
+    marginTop: 40
   },
   buttonRegister: {
     backgroundColor: "#00a680",
@@ -117,7 +133,15 @@ const styles = StyleSheet.create({
     color: "#f00",
     textAlign: "center",
     marginTop: 30
-  }
+  },
+  containerLogo: {
+    alignItems: "center",
+    marginBottom:30
+  },
+  logo: {
+    width: 300,
+    height: 150,
+  },
 });
 
 export default Register;

@@ -127,6 +127,11 @@ class Login extends Component {
               buttonStyle={styles.buttonLoginContainer}
               onPress={this.login}
             />
+            <Text style={styles.textRegister}>
+              ¿Aún no tienes cuenta? { " " }
+              <Text style={styles.buttonRegister} onPress={()=>this.props.navigation.navigate('Register')}>Regístrate</Text>
+            </Text>
+
             <Text style={styles.loginErrorMessage}>{loginErrorMessage}</Text>
             <Divider style={styles.divider} />
             <SocialIcon
@@ -185,6 +190,15 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: "#00a680",
     marginBottom: 20
+  },
+  textRegister:{
+    marginTop:15,
+    marginLeft:10,
+    marginRight:10
+  },
+  buttonRegister: {
+    color:'#00a680',
+    fontWeight:'bold'
   }
 });
 
