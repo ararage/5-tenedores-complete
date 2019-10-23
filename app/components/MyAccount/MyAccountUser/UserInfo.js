@@ -1,57 +1,98 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Avatar } from "react-native-elements";
-import * as firebase from 'firebase';
+import * as firebase from "firebase";
 
-class UserInfo extends Component{
-    constructor(state){
-        super(state);
-        this.state = {
-            userInfo:{}
-        }
-    }
+// Components
+import UpdateUserInfo from "./UpdateUserInfo";
 
-    componentDidMount = async () =>{
-        await this.getUserInfo();
-    }
+class UserInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...props,
+      userInfo: {}
+    };
+  }
 
-    getUserInfo = () =>{
-        const user = firebase.auth().currentUser;
-        user.providerData.forEach(userInfo=>{
-            this.setState({
-                userInfo:userInfo
-            });
-        });
-        console.log(this.state.userInfo)
-        
-    }
+  componentDidMount = async () => {
+    await this.getUserInfo();
+  };
 
-    render(){
-        const { displayName}  = this.state.userInfo;
-        console.log(displayName)
-        return(
-            <View style={styles.viewBody}> 
-                <Avatar 
-                    rounded
-                    size="large"
-                    source={{uri:"https://api.adorable.io/avatars/285/abott@adorable.png"}}
-                    containerStyle={styles.userInfoAvatar}
-                />
-            </View>
-        )
+  getUserInfo = () => {
+    const user = firebase.auth().currentUser;
+    user.providerData.forEach(userInfo => {
+      this.setState({
+        userInfo: userInfo
+      });
+    });
+  };
+
+  checkUserAvatar = photoURL => {
+    return photoURL
+      ? photoURL
+      : "https://api.adorable.io/avatars/285/abott@adorable.png";
+  };
+
+  updateUserDisplayName = newDisplayName => {
+    console.log("Userinfo: ", newDisplayName);
+  };
+
+  returnUpdateUserInfoComponent = userInfoData => {
+    /*
+      Check if the user info has been loaded, if the userInfoData (this.state.userInfo)
+      has the property uid you can load the Component UpdateUserInfo
+    */
+    if (userInfoData.hasOwnProperty("uid")) {
+      return (
+        <View>
+          <UpdateUserInfo
+            userInfo={this.state.userInfo}
+            updateUserDisplayName={this.updateUserDisplayName}
+          />
+        </View>
+      );
     }
+  };
+
+  render() {
+    const { displayName, email, photoURL } = this.state.userInfo;
+    return (
+      <View>
+        <View style={styles.viewBody}>
+          <Avatar
+            rounded
+            size="large"
+            source={{
+              uri: this.checkUserAvatar(photoURL)
+            }}
+            containerStyle={styles.userInfoAvatar}
+          />
+          <Text style={styles.displayName}>{displayName}</Text>
+          <Text>{email}</Text>
+        </View>
+        {this.returnUpdateUserInfoComponent(this.state.userInfo)}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    viewBody:{
-        flex:1,
-        alignItems:'center',
-        flexDirection:'row'
-    },
-    userInfoAvatar:{
-        marginRight:20,
-        
-    }
-})
+  viewBody: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    paddingTop: 30,
+    paddingBottom: 30,
+    backgroundColor: "#f2f2f2"
+  },
+  userInfoAvatar: {
+    marginRight: 20
+  },
+  displayName: {
+    fontWeight: "bold"
+  }
+});
 
 export default UserInfo;

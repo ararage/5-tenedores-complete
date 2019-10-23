@@ -1,41 +1,33 @@
-import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, ActivityIndicator } from 'react-native';
-import { Button, Image } from 'react-native-elements';
+import React, { Component } from "react";
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 
 // Components
-import UserInfo from './UserInfo';
+import UserInfo from "./UserInfo";
 
-class MyAccountUser extends Component{
-    constructor(props){
-        super(props);
-    }
-    
-    render(){
-        return(
-            <SafeAreaView style={styles.container}>  
-                <ScrollView
-                    contentContainerStyle={styles.viewBody}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    >
-                    <UserInfo />
-                    <Button title="Cerrar Sesion" onPress={() => this.logout()} />
-                </ScrollView>
-            </SafeAreaView>
-        );
-    }
-}  
+class MyAccountUser extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.viewBody}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
+          <UserInfo />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-    viewBody: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems:'center',
-      marginTop: 10
-    }
-  });
+  container: {
+    flex: 1
+  }
+});
 
 export default MyAccountUser;
