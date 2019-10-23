@@ -20,6 +20,10 @@ class UserInfo extends Component {
   };
 
   getUserInfo = () => {
+    /*
+      Initialize the state object with the Data from the Current User
+      retrieved from FireBase (displayName, email, photoURL)
+    */
     const user = firebase.auth().currentUser;
     user.providerData.forEach(userInfo => {
       this.setState({
@@ -41,7 +45,11 @@ class UserInfo extends Component {
   returnUpdateUserInfoComponent = userInfoData => {
     /*
       Check if the user info has been loaded, if the userInfoData (this.state.userInfo)
-      has the property uid you can load the Component UpdateUserInfo
+      has the property uid you can load the Component UpdateUserInfo passing the
+      userInfo retrieved from Firebase and the function updateUserDisplayName
+      for updating data in the OverlayOneInput Component
+
+      @param {Object} userInfoData  
     */
     if (userInfoData.hasOwnProperty("uid")) {
       return (
@@ -56,6 +64,7 @@ class UserInfo extends Component {
   };
 
   render() {
+    // Data from Firebase loaded from state object in the Constructor
     const { displayName, email, photoURL } = this.state.userInfo;
     return (
       <View>

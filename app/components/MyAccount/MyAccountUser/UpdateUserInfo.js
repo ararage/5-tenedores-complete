@@ -5,10 +5,15 @@ import OverlayOneInput from "../../Elements/OverlayOneInput";
 
 class UpdateUserInfo extends Component {
   constructor(props) {
+    /*
+      Initializes the state object merging the inherited data from the 
+      UserInfo component (userInfo, updateUserDisplayName)
+      @param {Object} props   
+    */
     super(props);
-    // Get data inherited { menuItems, overlayComponent }
     this.state = {
       ...props,
+      // This field manage the Overlay component for every input
       overlayComponent: null,
       menuItems: [
         {
@@ -19,6 +24,10 @@ class UpdateUserInfo extends Component {
           iconColorRight: "#ccc",
           iconColorLeft: "#ccc",
           onPress: () => {
+            /*
+              Open the overlay Component with the data provided, Placeholder, 
+              updateFunction and initial InputValue
+            */
             this.openOverlay(
               "Nombre y Apellidos",
               this.updateUserDisplayName,
@@ -53,12 +62,30 @@ class UpdateUserInfo extends Component {
   }
 
   updateUserDisplayName = async newDisplayName => {
-    // Exec the function "updateUserDisplayName" inherited from UserInfo
+    /*
+      Exec the updateUserDisplayName intherited from the UserInfo component, 
+      at the end sets the overlayComponent attribute (from the state object) to null
+      hidding the Overlay
+
+      @param {function} newDisplayName   
+    */
     this.state.updateUserDisplayName(newDisplayName);
     this.setState({ overlayComponent: null });
   };
 
   openOverlay = (placeholder, updateFunction, inputValue) => {
+    /*
+      Call the Overlay Component for every individual field to update if
+      the item it's invoked, the placeholder will be filled with the placeholder parameter
+      received, the updateFunction in this case it's the updateUserDisplayName function
+      that calls the updateUserDisplayName inherited from UserInfo component and the inputValue
+      it's the value retrieved from the Service/Database (inherited from the UserInfo component).
+
+      @param {string} placeholder
+      @param {function} updateFunction   
+      @param {string} inputValue
+    */
+
     this.setState({
       overlayComponent: (
         <OverlayOneInput
