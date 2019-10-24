@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 import { Avatar } from "react-native-elements";
 import * as firebase from "firebase";
+import Toast, { DURATION } from "react-native-easy-toast";
 
 // Components
 import UpdateUserInfo from "./UpdateUserInfo";
@@ -20,10 +21,10 @@ class UserInfo extends Component {
   };
 
   getUserInfo = () => {
-    /*
-      Initialize the state object with the Data from the Current User
-      retrieved from FireBase (displayName, email, photoURL)
-    */
+    /**
+     * Initialize the state object with the Data from the Current User
+     * retrieved from FireBase (displayName, email, photoURL)
+     */
     const user = firebase.auth().currentUser;
     user.providerData.forEach(userInfo => {
       this.setState({
@@ -32,31 +33,76 @@ class UserInfo extends Component {
     });
   };
 
+  reAuthenticate = currentPassword => {
+    const user = firebase.auth().currentUser;
+    const credentials = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
+    return user.reauthenticateWithCredential(credentials);
+  };
+
   checkUserAvatar = photoURL => {
     return photoURL
       ? photoURL
       : "https://api.adorable.io/avatars/285/abott@adorable.png";
   };
 
-  updateUserDisplayName = newDisplayName => {
-    console.log("Userinfo: ", newDisplayName);
+  updateUserDisplayName = async newDisplayName => {
+    /**
+     * Update User info using the Firebase API and retrieve the new Data
+     *
+     * @param {Object} newDisplayName
+     */
+    const update = {
+      displayName: newDisplayName
+    };
+    await firebase.auth().currentUser.updateProfile(update);
+    this.getUserInfo();
+  };
+
+  updateUserEmail = (newEmail, password) => {
+    this.reAuthenticate(password)
+      .then(() => {
+        const user = firebase.auth().currentUser;
+        user
+          .updateEmail(newEmail)
+          .then(() => {
+            this.refs.toastError.show(
+              "Email actualizado, vuelve a iniciar sesión",
+              200,
+              () => {
+                firebase.auth().signOut();
+              }
+            );
+          })
+          .catch(error => {
+            //console.log(error);
+            this.refs.toastError.show(error, 1500);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        this.refs.toastError.show("Tu contraseña no es correcta", 1500);
+      });
   };
 
   returnUpdateUserInfoComponent = userInfoData => {
-    /*
-      Check if the user info has been loaded, if the userInfoData (this.state.userInfo)
-      has the property uid you can load the Component UpdateUserInfo passing the
-      userInfo retrieved from Firebase and the function updateUserDisplayName
-      for updating data in the OverlayOneInput Component
-
-      @param {Object} userInfoData  
-    */
+    /**
+     * Check if the user info has been loaded, if the userInfoData (this.state.userInfo)
+     * has the property uid you can load the Component UpdateUserInfo passing the
+     * userInfo retrieved from Firebase and the function updateUserDisplayName
+     * for updating data in the OverlayOneInput Component
+     *
+     * @param {Object} userInfoData
+     */
     if (userInfoData.hasOwnProperty("uid")) {
       return (
         <View>
           <UpdateUserInfo
             userInfo={this.state.userInfo}
             updateUserDisplayName={this.updateUserDisplayName}
+            updateUserEmail={this.updateUserEmail}
           />
         </View>
       );
@@ -64,7 +110,9 @@ class UserInfo extends Component {
   };
 
   render() {
-    // Data from Firebase loaded from state object in the Constructor
+    /**
+     * Data from Firebase loaded in the state object by the constructor
+     */
     const { displayName, email, photoURL } = this.state.userInfo;
     return (
       <View>
@@ -77,10 +125,27 @@ class UserInfo extends Component {
             }}
             containerStyle={styles.userInfoAvatar}
           />
-          <Text style={styles.displayName}>{displayName}</Text>
-          <Text>{email}</Text>
+          <View>
+            <Text style={styles.displayName}>{displayName}</Text>
+            <Text>{email}</Text>
+          </View>
         </View>
         {this.returnUpdateUserInfoComponent(this.state.userInfo)}
+        <Button
+          title="Cerrar Sesión"
+          onPress={() => firebase.auth().signOut()}
+          buttonStyle={styles.btnCloseSession}
+          titleStyle={styles.btnCloseSessionText}
+        />
+        <Toast
+          ref="toastError"
+          position="bottom"
+          positionValue={400}
+          fadeInDuration={1000}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "#fff" }}
+        />
       </View>
     );
   }
@@ -101,7 +166,9 @@ const styles = StyleSheet.create({
   },
   displayName: {
     fontWeight: "bold"
-  }
+  },
+  btnCloseSession: {},
+  btnCloseSessionText: {}
 });
 
 export default UserInfo;

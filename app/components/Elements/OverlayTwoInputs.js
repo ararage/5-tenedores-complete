@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Overlay, Input, Button, Icon } from "react-native-elements";
 
-class OverlayOneInput extends Component {
+class OverlayTwoInputs extends Component {
   constructor(props) {
     /**
      *  Fill Props from Update User Info (isVisibleOverlay, placeholder, inputValue)
@@ -13,12 +13,20 @@ class OverlayOneInput extends Component {
     };
   }
 
-  onChangeInput = inputData => {
+  onChangeInputOne = inputData => {
     /**
-     * Update the inputValue passed with onchange event
+     * Update the inputValue passed with onchange event for the first Input
      * @param {String} inputData
      */
-    this.setState({ inputValue: inputData });
+    this.setState({ inputValueOne: inputData });
+  };
+
+  onChangeInputTwo = inputData => {
+    /**
+     * Update the inputValue passed with onchange event for the second Input
+     * @param {String} inputData
+     */
+    this.setState({ inputValueTwo: inputData });
   };
 
   update = () => {
@@ -26,8 +34,9 @@ class OverlayOneInput extends Component {
      * Call the updateFunction (updateUserDisplayName) for updating a Field
      * and hides the Overlay Component
      */
-    const newValue = this.state.inputValue;
-    this.state.updateFunction(newValue);
+    const newValueOne = this.state.inputValueOne;
+    const newValueTwo = this.state.inputValueTwo;
+    this.state.updateFunction(newValueOne, newValueTwo);
     this.setState({ isVisibleOverlay: false });
   };
 
@@ -40,7 +49,15 @@ class OverlayOneInput extends Component {
     /**
      * Get Data from State (Update User Info) and fill the input Overlay
      */
-    const { isVisibleOverlay, placeholder, inputValue } = this.state;
+    const {
+      isVisibleOverlay,
+      placeholderOne,
+      placeholderTwo,
+      inputValueOne,
+      inputValueTwo,
+      isPassword
+    } = this.state;
+
     return (
       <Overlay
         isVisible={isVisibleOverlay}
@@ -51,9 +68,17 @@ class OverlayOneInput extends Component {
         <View style={styles.viewOverlay}>
           <Input
             containerStyle={styles.inputContainer}
-            placeholder={placeholder}
-            onChangeText={value => this.onChangeInput(value)}
-            value={inputValue}
+            placeholder={placeholderOne}
+            onChangeText={value => this.onChangeInputOne(value)}
+            value={inputValueOne}
+          />
+          <Input
+            containerStyle={styles.inputContainer}
+            placeholder={placeholderTwo}
+            onChangeText={value => this.onChangeInputTwo(value)}
+            value={inputValueTwo}
+            password={isPassword}
+            secureTextEntry={isPassword}
           />
           <Button
             buttonStyle={styles.buttonUpdate}
@@ -102,4 +127,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default OverlayOneInput;
+export default OverlayTwoInputs;

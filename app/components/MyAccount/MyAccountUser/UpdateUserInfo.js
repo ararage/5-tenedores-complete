@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { ListItem } from "react-native-elements";
+
+// Components
 import OverlayOneInput from "../../Elements/OverlayOneInput";
+import OverlayTwoInputs from "../../Elements/OverlayTwoInputs";
 
 class UpdateUserInfo extends Component {
   constructor(props) {
-    /*
+    /** 
       Initializes the state object merging the inherited data from the 
       UserInfo component (userInfo, updateUserDisplayName)
       @param {Object} props   
@@ -25,9 +28,9 @@ class UpdateUserInfo extends Component {
           iconColorLeft: "#ccc",
           onPress: () => {
             /*
-              Open the overlay Component with the data provided, Placeholder, 
-              updateFunction and initial InputValue
-            */
+             * Open the overlay Component with the data provided, Placeholder,
+             * updateFunction and initial InputValue
+             */
             this.openOverlay(
               "Nombre y Apellidos",
               this.updateUserDisplayName,
@@ -44,6 +47,12 @@ class UpdateUserInfo extends Component {
           iconColorLeft: "#ccc",
           onPress: () => {
             console.log("Click en email");
+            this.openOverlayTwoInputs(
+              "Email",
+              "Password",
+              props.userInfo.email,
+              this.updateUserEmail
+            );
           }
         },
         {
@@ -62,19 +71,35 @@ class UpdateUserInfo extends Component {
   }
 
   updateUserDisplayName = async newDisplayName => {
-    /*
-      Exec the updateUserDisplayName intherited from the UserInfo component, 
-      at the end sets the overlayComponent attribute (from the state object) to null
-      hidding the Overlay
+    /**
+     *  Exec the updateUserDisplayName intherited from the UserInfo component,
+     *  at the end sets the overlayComponent attribute (from the state object) to null
+     *  destroying the Overlay
+     *
+     *  @param {string} newDisplayName
+     */
+    if (newDisplayName) this.state.updateUserDisplayName(newDisplayName);
+    this.setState({ overlayComponent: null });
+  };
 
-      @param {function} newDisplayName   
-    */
-    this.state.updateUserDisplayName(newDisplayName);
+  updateUserEmail = async (newEmail, password) => {
+    /**
+     *  Exec the updateUserEmail intherited from the UserInfo component,
+     *  at the end sets the overlayComponent attribute (from the state object) to null
+     *  destroying the Overlay
+     *
+     *  @param {string} newEmail
+     *  @param {string} password
+     */
+    const emailOld = this.props.userInfo.email;
+    if (emailOld != newEmail) {
+      this.state.updateUserEmail(newEmail, password);
+    }
     this.setState({ overlayComponent: null });
   };
 
   openOverlay = (placeholder, updateFunction, inputValue) => {
-    /*
+    /**
       Call the Overlay Component for every individual field to update if
       the item it's invoked, the placeholder will be filled with the placeholder parameter
       received, the updateFunction in this case it's the updateUserDisplayName function
@@ -98,7 +123,39 @@ class UpdateUserInfo extends Component {
     });
   };
 
+  openOverlayTwoInputs = (
+    placeholderOne,
+    placeholderTwo,
+    inputValueOne,
+    updateFunction
+  ) => {
+    /**
+     *
+     * @param {string} placeholderOne
+     * @param {string} placeholderTwo
+     * @param {string} inputValueOne
+     * @param {function} updateFunction
+     */
+    this.setState({
+      overlayComponent: (
+        <OverlayTwoInputs
+          isVisibleOverlay={true}
+          placeholderOne={placeholderOne}
+          placeholderTwo={placeholderTwo}
+          inputValueOne={inputValueOne}
+          inputValueTwo=""
+          isPassword={true}
+          updateFunction={updateFunction}
+        />
+      )
+    });
+  };
+
   render() {
+    /**
+     * Render the User Data and an individual Overlay Component for every User Field
+     * for update actions
+     */
     const { menuItems, overlayComponent } = this.state;
     return (
       <View>
