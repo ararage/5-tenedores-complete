@@ -46,7 +46,6 @@ class UpdateUserInfo extends Component {
           iconColorRight: "#ccc",
           iconColorLeft: "#ccc",
           onPress: () => {
-            console.log("Click en email");
             this.openOverlayTwoInputs(
               "Email",
               "Password",

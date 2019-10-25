@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, SafeAreaView, ScrollView , ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator
+} from "react-native";
 import { Button, Text, Image } from "react-native-elements";
 
 import Toast from "react-native-easy-toast";
@@ -44,7 +49,6 @@ class Register extends Component {
             });
           })
           .catch(err => {
-            console.log("El email ya esta en uso");
             this.refs.toast.show("El mail ya esta en uso", 2500);
           });
       } else {
@@ -72,14 +76,14 @@ class Register extends Component {
     } = this.state;
 
     return (
-      <SafeAreaView style={styles.container}>  
+      <SafeAreaView style={styles.container}>
         <ScrollView
           style={styles.viewBody}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
           <Image
-              source={require("../../../assets/img/5-tenedores-letras-icono-logo.png")}
+            source={require("../../../assets/img/5-tenedores-letras-icono-logo.png")}
             containerStyle={styles.containerLogo}
             style={styles.logo}
             PlaceholderContent={<ActivityIndicator />}
@@ -136,12 +140,12 @@ const styles = StyleSheet.create({
   },
   containerLogo: {
     alignItems: "center",
-    marginBottom:30
+    marginBottom: 30
   },
   logo: {
     width: 300,
-    height: 150,
-  },
+    height: 150
+  }
 });
 
 export default Register;

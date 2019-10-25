@@ -37,7 +37,6 @@ class Login extends Component {
   login = () => {
     const validate = this.refs.loginForm.getValue();
     if (!validate) {
-      console.log("formulario Incorrecto");
       this.setState({ loginErrorMessage: "Los datos capturados son erroneos" });
       return;
     }
@@ -128,8 +127,13 @@ class Login extends Component {
               onPress={this.login}
             />
             <Text style={styles.textRegister}>
-              ¿Aún no tienes cuenta? { " " }
-              <Text style={styles.buttonRegister} onPress={()=>this.props.navigation.navigate('Register')}>Regístrate</Text>
+              ¿Aún no tienes cuenta?{" "}
+              <Text
+                style={styles.buttonRegister}
+                onPress={() => this.props.navigation.navigate("Register")}
+              >
+                Regístrate
+              </Text>
             </Text>
 
             <Text style={styles.loginErrorMessage}>{loginErrorMessage}</Text>
@@ -191,14 +195,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#00a680",
     marginBottom: 20
   },
-  textRegister:{
-    marginTop:15,
-    marginLeft:10,
-    marginRight:10
+  textRegister: {
+    marginTop: 15,
+    marginLeft: 10,
+    marginRight: 10
   },
   buttonRegister: {
-    color:'#00a680',
-    fontWeight:'bold'
+    color: "#00a680",
+    fontWeight: "bold"
   }
 });
 
