@@ -5,6 +5,8 @@ import { ListItem } from "react-native-elements";
 // Components
 import OverlayOneInput from "../../Elements/OverlayOneInput";
 import OverlayTwoInputs from "../../Elements/OverlayTwoInputs";
+import OverlayThreeInputs from "../../Elements/OverlayThreeInputs";
+import Toast from "react-native-easy-toast";
 
 class UpdateUserInfo extends Component {
   constructor(props) {
@@ -49,7 +51,7 @@ class UpdateUserInfo extends Component {
             this.openOverlayTwoInputs(
               "Email",
               "Password",
-              props.userInfo.email,
+              String(props.userInfo.email),
               this.updateUserEmail
             );
           }
@@ -62,7 +64,12 @@ class UpdateUserInfo extends Component {
           iconColorRight: "#ccc",
           iconColorLeft: "#ccc",
           onPress: () => {
-            console.log("Click en cambiar pass");
+            this.openOverlayThreeInputs(
+              "Contraseña Actual",
+              "Nueva Contraseña",
+              "Repetir Nueva Contraseña",
+              this.updateUserPassword
+            );
           }
         }
       ]
@@ -93,6 +100,25 @@ class UpdateUserInfo extends Component {
     const emailOld = this.props.userInfo.email;
     if (emailOld != newEmail) {
       this.state.updateUserEmail(newEmail, password);
+    }
+    this.setState({ overlayComponent: null });
+  };
+
+  updateUserPassword = async (
+    currentPassword,
+    newPassword,
+    repeatNewPassword
+  ) => {
+    if (currentPassword && newPassword && repeatNewPassword) {
+      if (newPassword === repeatNewPassword) {
+        console.log("CHIDO");
+      } else {
+        this.refs.toastMessage.show(
+          "Las nuevas contraseñas tienen que ser iguales"
+        );
+      }
+    } else {
+      this.refs.toastMessage.show("Tienes que llenar todos los campos");
     }
     this.setState({ overlayComponent: null });
   };
@@ -150,6 +176,29 @@ class UpdateUserInfo extends Component {
     });
   };
 
+  openOverlayThreeInputs = (
+    placeholderOne,
+    placeholderTwo,
+    placeholderThree,
+    updateFunction
+  ) => {
+    this.setState({
+      overlayComponent: (
+        <OverlayThreeInputs
+          isVisibleOverlay={true}
+          placeholderOne={placeholderOne}
+          placeholderTwo={placeholderTwo}
+          placeholderThree={placeholderThree}
+          inputValueOne=""
+          inputValueTwo=""
+          inputValueThree=""
+          isPassword={true}
+          updateFunction={updateFunction}
+        />
+      )
+    });
+  };
+
   render() {
     /**
      * Render the User Data and an individual Overlay Component for every User Field
@@ -177,6 +226,15 @@ class UpdateUserInfo extends Component {
           />
         ))}
         {overlayComponent}
+        <Toast
+          ref="toastMessage"
+          position="bottom"
+          positionValue={400}
+          fadeInDuration={1000}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "#fff" }}
+        />
       </View>
     );
   }

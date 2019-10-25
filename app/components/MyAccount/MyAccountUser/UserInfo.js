@@ -94,6 +94,8 @@ class UserInfo extends Component {
       });
   };
 
+  updateUserPassword = async (currentPassword, newPassword) => {};
+
   updateUserPhotoURL = async photoUri => {
     /**
      * Update the current FireBase User photoURL with the photoUri uploaded
@@ -122,6 +124,7 @@ class UserInfo extends Component {
             userInfo={this.state.userInfo}
             updateUserDisplayName={this.updateUserDisplayName}
             updateUserEmail={this.updateUserEmail}
+            updateUserPassword={this.updateUserPassword}
           />
         </View>
       );
