@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
-import { Avatar } from "react-native-elements";
+import { StyleSheet, View, Text } from "react-native";
+import { Avatar, Button } from "react-native-elements";
 import Toast, { DURATION } from "react-native-easy-toast";
 
 import * as firebase from "firebase";
@@ -94,7 +94,35 @@ class UserInfo extends Component {
       });
   };
 
-  updateUserPassword = async (currentPassword, newPassword) => {};
+  updateUserPassword = async (currentPassword, newPassword) => {
+    this.reAuthenticate(currentPassword)
+      .then(() => {
+        const user = firebase.auth().currentUser;
+        user
+          .updatePassword(newPassword)
+          .then(() => {
+            this.refs.toastError.show(
+              "Contraseña actualizada correctamente, vuelve a iniciar sesión",
+              50,
+              () => {
+                firebase.auth().signOut();
+              }
+            );
+          })
+          .catch(() => {
+            this.refs.toastError.show(
+              "Error del servidor, intentelo más tarde",
+              1500
+            );
+          });
+      })
+      .catch(() => {
+        this.refs.toastError.show(
+          "Tu contraseña actual introducida no es correcta",
+          1500
+        );
+      });
+  };
 
   updateUserPhotoURL = async photoUri => {
     /**
@@ -275,8 +303,20 @@ const styles = StyleSheet.create({
   displayName: {
     fontWeight: "bold"
   },
-  btnCloseSession: {},
-  btnCloseSessionText: {}
+  btnCloseSession: {
+    marginTop: 30,
+    borderRadius: 0,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#e3e3e3",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e3e3e3",
+    paddingBottom: 15,
+    paddingTop: 15
+  },
+  btnCloseSessionText: {
+    color: "#00a680"
+  }
 });
 
 export default UserInfo;

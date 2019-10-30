@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
 
 // Components
 import UserInfo from "./UserInfo";
@@ -13,11 +13,12 @@ class MyAccountUser extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView
-          contentContainerStyle={styles.viewBody}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
-          <UserInfo />
+          <View style={styles.viewUserAccount}>
+            <UserInfo />
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -25,6 +26,10 @@ class MyAccountUser extends Component {
 }
 
 const styles = StyleSheet.create({
+  viewUserAccount: {
+    height: "100%",
+    backgroundColor: "#f2f2f2"
+  },
   container: {
     flex: 1
   }

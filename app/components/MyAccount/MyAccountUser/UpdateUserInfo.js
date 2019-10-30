@@ -6,7 +6,8 @@ import { ListItem } from "react-native-elements";
 import OverlayOneInput from "../../Elements/OverlayOneInput";
 import OverlayTwoInputs from "../../Elements/OverlayTwoInputs";
 import OverlayThreeInputs from "../../Elements/OverlayThreeInputs";
-import Toast from "react-native-easy-toast";
+// import Toast from "react-native-easy-toast";
+import Toast from "react-native-tiny-toast";
 
 class UpdateUserInfo extends Component {
   constructor(props) {
@@ -104,25 +105,6 @@ class UpdateUserInfo extends Component {
     this.setState({ overlayComponent: null });
   };
 
-  updateUserPassword = async (
-    currentPassword,
-    newPassword,
-    repeatNewPassword
-  ) => {
-    if (currentPassword && newPassword && repeatNewPassword) {
-      if (newPassword === repeatNewPassword) {
-        console.log("CHIDO");
-      } else {
-        this.refs.toastMessage.show(
-          "Las nuevas contraseñas tienen que ser iguales"
-        );
-      }
-    } else {
-      this.refs.toastMessage.show("Tienes que llenar todos los campos");
-    }
-    this.setState({ overlayComponent: null });
-  };
-
   openOverlay = (placeholder, updateFunction, inputValue) => {
     /**
       Call the Overlay Component for every individual field to update if
@@ -176,6 +158,27 @@ class UpdateUserInfo extends Component {
     });
   };
 
+  updateUserPassword = async (
+    currentPassword,
+    newPassword,
+    repeatNewPassword
+  ) => {
+    if (currentPassword && newPassword && repeatNewPassword) {
+      if (newPassword === repeatNewPassword) {
+        if (currentPassword === newPassword) {
+          Toast.show("La nueva contraseña no puede ser igual a la actual");
+        } else {
+          this.state.updateUserPassword(currentPassword, newPassword);
+        }
+      } else {
+        Toast.show("Las nuevas contraseñas tienen que ser iguales");
+      }
+    } else {
+      Toast.show("Tienes que llenar todos los campos");
+    }
+    this.setState({ overlayComponent: null });
+  };
+
   openOverlayThreeInputs = (
     placeholderOne,
     placeholderTwo,
@@ -226,15 +229,6 @@ class UpdateUserInfo extends Component {
           />
         ))}
         {overlayComponent}
-        <Toast
-          ref="toastMessage"
-          position="bottom"
-          positionValue={400}
-          fadeInDuration={1000}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: "#fff" }}
-        />
       </View>
     );
   }
