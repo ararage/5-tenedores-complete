@@ -1,11 +1,20 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
+import ActionButton from "react-native-action-button";
 
 class Home extends Component {
+  goToScreen = nameScreen => {
+    this.props.navigation.navigate(nameScreen);
+  };
+
   render() {
     return (
       <View style={styles.viewBody}>
-        <Text>Home Screen</Text>
+        <Text>Restaurants Screen</Text>
+        <ActionButton
+          buttonColor="#00a680"
+          onPress={() => this.goToScreen("AddRestaurant")}
+        />
       </View>
     );
   }

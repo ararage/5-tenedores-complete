@@ -60,13 +60,7 @@ class Login extends Component {
 
   loginFacebook = async () => {
     try {
-      const {
-        type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions
-      } = await Facebook.logInWithReadPermissionsAsync(
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
         FacebookAPI.application_id,
         { permissions: FacebookAPI.permissions }
       );

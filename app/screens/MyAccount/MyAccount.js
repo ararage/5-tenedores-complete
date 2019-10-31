@@ -1,14 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Button } from "react-native-elements";
 
 // Firebase
 import * as firebase from "firebase";
 
 // Components
 import MyAccountGuest from "../../components/MyAccount/MyAccountGuest";
-import MyAccountUser from "../../components/MyAccount/MyAccountUser"
-
+import MyAccountUser from "../../components/MyAccount/MyAccountUser";
 
 class MyAccount extends Component {
   constructor() {
@@ -42,13 +39,11 @@ class MyAccount extends Component {
   render() {
     const { login } = this.state;
     if (login) {
-      return (
-        <MyAccountUser />
-      );
+      return <MyAccountUser />;
     }
     return (
       // Pass goToScreen function to MyAccountGuest component
-      <MyAccountGuest goToScreen={this.goToScreen}/>
+      <MyAccountGuest goToScreen={this.goToScreen} />
     );
   }
 }

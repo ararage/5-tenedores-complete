@@ -6,7 +6,7 @@ import { ListItem } from "react-native-elements";
 import OverlayOneInput from "../../Elements/OverlayOneInput";
 import OverlayTwoInputs from "../../Elements/OverlayTwoInputs";
 import OverlayThreeInputs from "../../Elements/OverlayThreeInputs";
-// import Toast from "react-native-easy-toast";
+
 import Toast from "react-native-tiny-toast";
 
 class UpdateUserInfo extends Component {
@@ -99,7 +99,7 @@ class UpdateUserInfo extends Component {
      *  @param {string} password
      */
     const emailOld = this.props.userInfo.email;
-    if (emailOld != newEmail) {
+    if (emailOld != newEmail && password) {
       this.state.updateUserEmail(newEmail, password);
     }
     this.setState({ overlayComponent: null });
